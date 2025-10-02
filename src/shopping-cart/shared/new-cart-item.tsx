@@ -27,6 +27,7 @@ import { PROMOTIONAL_VALUES, type NewCartItemI } from "../interfaces";
 
 import { useShoppingCartContext } from "../contexts/shopping-cart.context";
 import { calSubTotal } from "../helpers";
+import { Separator } from "@/components/ui/separator";
 
 const NAME_MIN_LENGTH = 2;
 const promotionValuesId = PROMOTIONAL_VALUES.map((promo) => promo.id);
@@ -78,93 +79,98 @@ export const NewCartItem = () => {
 
   return (
     <section>
-      <h2 className="text-center">Nueva tarea</h2>
+      <h2 className="text-2xl">Nueva tarea</h2>
+      <Separator />
 
-      <Form {...newCartItemForm}>
-        <form
-          onSubmit={newCartItemForm.handleSubmit(newCartItemSubmitFormHandler)}
-          className="space-y-4"
-        >
-          <FormField
-            control={newCartItemForm.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Product name</FormLabel>
-                <FormControl>
-                  <Input placeholder="product name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+      <div className="my-5">
+        <Form {...newCartItemForm}>
+          <form
+            onSubmit={newCartItemForm.handleSubmit(
+              newCartItemSubmitFormHandler
             )}
-          />
-
-          <div className="flex flex-col gap-4 md:flex-row md:items-baseline">
+            className="space-y-4"
+          >
             <FormField
               control={newCartItemForm.control}
-              name="numOfItems"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cantidad</FormLabel>
+                  <FormLabel>Product name</FormLabel>
                   <FormControl>
-                    <Input placeholder="cantidad de producto" {...field} />
+                    <Input placeholder="product name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <FormField
-              control={newCartItemForm.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Precio</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Precio unitario" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Precio unitario sin promoción
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={newCartItemForm.control}
-              name="promo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Promoción</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="flex flex-col gap-4 md:flex-row md:items-baseline">
+              <FormField
+                control={newCartItemForm.control}
+                name="numOfItems"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cantidad</FormLabel>
                     <FormControl>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Promoción" />
-                      </SelectTrigger>
+                      <Input placeholder="cantidad de producto" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      {PROMOTIONAL_VALUES.map((promotion) => (
-                        <SelectItem key={promotion.id} value={promotion.id}>
-                          {promotion.text}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <Button className="bg-slate-400 hover:bg-slate-500" type="submit">
-            Añadir producto
-          </Button>
-        </form>
-      </Form>
+              <FormField
+                control={newCartItemForm.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Precio</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Precio unitario" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Precio unitario sin promoción
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={newCartItemForm.control}
+                name="promo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Promoción</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Promoción" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {PROMOTIONAL_VALUES.map((promotion) => (
+                          <SelectItem key={promotion.id} value={promotion.id}>
+                            {promotion.text}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button className="bg-slate-400 hover:bg-slate-500" type="submit">
+              Añadir producto
+            </Button>
+          </form>
+        </Form>
+      </div>
     </section>
   );
 };
