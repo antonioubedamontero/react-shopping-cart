@@ -24,6 +24,8 @@ export const shoppingCartReducer = (
 
     case "select_item":
       return selectItemFromCart(state, action);
+    case "clear_cart":
+      return clearCart();
 
     default:
       throw new Error("Shopping cart action is not defined");
@@ -34,6 +36,8 @@ const addItemToCart = (
   state: ShoppingCartState,
   action: ShoppingCartAction
 ) => {
+  if (!action.payload) throw new Error("payload is required");
+
   const { shoppingCartItem: shoppingCartPayloadItem } = action.payload;
   if (!shoppingCartPayloadItem) {
     return state;
@@ -64,6 +68,8 @@ const removeItemFromCart = (
   state: ShoppingCartState,
   action: ShoppingCartAction
 ) => {
+  if (!action.payload) throw new Error("payload is required");
+
   const { id: payloadId } = action.payload;
 
   if (!payloadId) {
@@ -97,6 +103,8 @@ const unSelectItemFromCart = (
   state: ShoppingCartState,
   action: ShoppingCartAction
 ) => {
+  if (!action.payload) throw new Error("payload is required");
+
   const { id: payloadId } = action.payload;
 
   if (!payloadId) {
@@ -129,6 +137,8 @@ const selectItemFromCart = (
   state: ShoppingCartState,
   action: ShoppingCartAction
 ) => {
+  if (!action.payload) throw new Error("payload is required");
+
   const { id: payloadId } = action.payload;
 
   if (!payloadId) {
@@ -155,4 +165,8 @@ const selectItemFromCart = (
     numOfSelectedItems: state.numOfSelectedItems + 1,
     total: state.total + elementToSelect.total!,
   };
+};
+
+const clearCart = () => {
+  return shoppingCartInitialState;
 };

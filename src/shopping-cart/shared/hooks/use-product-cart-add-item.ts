@@ -2,16 +2,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  PROMOTIONAL_VALUES,
-  type ShoppingCartItem,
-} from "@/shopping-cart/interfaces";
+import { type ShoppingCartItem } from "@/shopping-cart/interfaces";
 import { useShoppingCartContext } from "@/shopping-cart/contexts/shopping-cart.context";
 import { calSubTotal } from "@/shopping-cart/helpers";
-
-const promotionValuesId = PROMOTIONAL_VALUES.map((promo) => promo.id);
-
-const NAME_MIN_LENGTH = 2;
+import { cartItemFormSchema } from "./cart-item-zod-schema";
 
 const FORM_INITIAL_VALUE: ShoppingCartItem = {
   name: "",
@@ -22,19 +16,7 @@ const FORM_INITIAL_VALUE: ShoppingCartItem = {
   total: 0,
 };
 
-// Form schema validation
-const cartItemFormSchema = z.object({
-  name: z
-    .string()
-    .min(NAME_MIN_LENGTH, `Longitud mínima ${NAME_MIN_LENGTH} caracteres`),
-  numOfItems: z.coerce
-    .number("Debe ser un número")
-    .min(1, "Debe ser mayor o igual a 1"),
-  price: z.coerce.number("Debe ser un número").gt(0, "Debe ser mayor a cero"),
-  promo: z.enum(promotionValuesId),
-});
-
-export const useProductCartAddEditItem = () => {
+export const useProductCartAddItem = () => {
   const { shoppingCartDispatch } = useShoppingCartContext();
 
   // Form details

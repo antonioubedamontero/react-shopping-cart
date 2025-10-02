@@ -22,11 +22,13 @@ import { Input } from "@/components/ui/input";
 import { PROMOTIONAL_VALUES } from "../interfaces";
 
 import { Separator } from "@/components/ui/separator";
-import { useProductCartAddEditItem } from "./hooks";
+import { useProductCartAddItem } from "./hooks";
+import { useShoppingCartContext } from "../contexts/shopping-cart.context";
 
 export const NewCartItem = () => {
   const { cartItemForm, addCartItemFormHandler, resetCartItemFormHandler } =
-    useProductCartAddEditItem();
+    useProductCartAddItem();
+  const { shoppingCartDispatch } = useShoppingCartContext();
 
   return (
     <section>
@@ -120,11 +122,23 @@ export const NewCartItem = () => {
               </Button>
 
               <Button
-                className="bg-red-400 hover:bg-slate-500"
+                className="bg-green-400 hover:bg-green-300"
                 type="button"
                 onClick={() => resetCartItemFormHandler()}
               >
                 Limpiar
+              </Button>
+
+              <Button
+                className="bg-red-400 hover:bg-red-300"
+                type="button"
+                onClick={() =>
+                  shoppingCartDispatch({
+                    type: "clear_cart",
+                  })
+                }
+              >
+                Vaciar carrito
               </Button>
             </div>
           </form>
