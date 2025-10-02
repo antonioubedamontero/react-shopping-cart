@@ -16,7 +16,7 @@ export const ShoppingCart = () => {
   return (
     <div className="h-screen bg-neutral-50">
       <CustomHeader name="Carrito de la compra" />
-      <main className="px-4 flex flex-col gap-4">
+      <main className="p-4 flex flex-col gap-1">
         <ShoppingCartContext.Provider
           value={{ shoppingCartState, shoppingCartDispatch }}
         >

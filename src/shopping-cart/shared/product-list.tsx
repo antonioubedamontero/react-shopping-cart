@@ -1,11 +1,12 @@
 import { Separator } from "@/components/ui/separator";
 
 import { useShoppingCartContext } from "../contexts/shopping-cart.context";
-import { DataTable, productListColumns } from "./product-list-table";
+import { DataTable, useProductListColumns } from "./product-list-table";
 
 export const ProductList = () => {
   const { shoppingCartState } = useShoppingCartContext();
   const cartItems = shoppingCartState.shoppingCartItems;
+  const productListColumns = useProductListColumns();
 
   return (
     <section>
@@ -13,7 +14,7 @@ export const ProductList = () => {
 
       <Separator />
 
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto py-6">
         <DataTable columns={productListColumns} data={cartItems} />
       </div>
     </section>
