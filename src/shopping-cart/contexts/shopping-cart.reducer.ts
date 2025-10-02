@@ -39,7 +39,8 @@ const addItemToCart = (
     return state;
   }
 
-  const { name: namePayload, total: totalPayload } = shoppingCartPayloadItem;
+  const { name: namePayload, total: totalPayload = 0 } =
+    shoppingCartPayloadItem;
   const itemExists = state.shoppingCartItems.some(
     (item) => item.name === namePayload
   );
@@ -88,7 +89,7 @@ const removeItemFromCart = (
       ? state.numOfSelectedItems - 1
       : state.numOfSelectedItems,
     total: elementToRemove.selected
-      ? state.total - elementToRemove.total
+      ? state.total - elementToRemove.total!
       : state.total,
   };
 };
@@ -121,7 +122,7 @@ const unSelectItemFromCart = (
   return {
     shoppingCartItems: newShoppingCartItems,
     numOfSelectedItems: state.numOfSelectedItems - 1,
-    total: state.total - elementToDeselect.total,
+    total: state.total - elementToDeselect.total!,
   };
 };
 
@@ -153,6 +154,6 @@ const selectItemFromCart = (
   return {
     shoppingCartItems: newShoppingCartItems,
     numOfSelectedItems: state.numOfSelectedItems + 1,
-    total: state.total - elementToSelect.total,
+    total: state.total + elementToSelect.total!,
   };
 };
