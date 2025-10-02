@@ -52,7 +52,6 @@ const addItemToCart = (
   // Generate new id with uuid
   const newItem = shoppingCartPayloadItem;
   newItem.id = uuidv4();
-  newItem.selected = true;
 
   return {
     shoppingCartItems: [newItem, ...state.shoppingCartItems],
