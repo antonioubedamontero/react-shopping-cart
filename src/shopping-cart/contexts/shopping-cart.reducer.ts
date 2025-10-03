@@ -16,6 +16,9 @@ export const shoppingCartReducer = (
     case "add_item_to_cart":
       return addItemToCart(state, action);
 
+    case "edit_item_in_cart":
+      return editItemInCart(state, action);
+
     case "remove_item_from_cart":
       return removeItemFromCart(state, action);
 
@@ -24,6 +27,7 @@ export const shoppingCartReducer = (
 
     case "select_item":
       return selectItemFromCart(state, action);
+
     case "clear_cart":
       return clearCart();
 
@@ -61,6 +65,44 @@ const addItemToCart = (
     shoppingCartItems: [newItem, ...state.shoppingCartItems],
     numOfSelectedItems: state.numOfSelectedItems + 1,
     total: state.total + totalPayload,
+  };
+};
+
+const editItemInCart = (
+  state: ShoppingCartState,
+  action: ShoppingCartAction
+) => {
+  if (!action.payload) throw new Error("payload is required");
+
+  const { shoppingCartItem: shoppingCartItemPayload } = action.payload;
+
+  if (!shoppingCartItemPayload)
+    throw new Error("Shopping cart item missing in payload when editing item");
+
+  const { id: payloadId } = shoppingCartItemPayload;
+
+  if (!payloadId) {
+    return state;
+  }
+
+  const shoppingCartItemsEdited = state.shoppingCartItems.map((item) => {
+    if (item.id === payloadId) return shoppingCartItemPayload;
+    return item;
+  });
+
+  const numOfSelectedItems = shoppingCartItemsEdited.reduce((acc, act) => {
+    if (act.selected) return acc + 1;
+    return acc;
+  }, 0);
+  const total = shoppingCartItemsEdited.reduce((acc, act) => {
+    if (act.selected) return acc + act.total;
+    return acc;
+  }, 0);
+
+  return {
+    shoppingCartItems: shoppingCartItemsEdited,
+    numOfSelectedItems,
+    total,
   };
 };
 

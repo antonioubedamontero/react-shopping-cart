@@ -1,12 +1,23 @@
-import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 
-import { useShoppingCartContext } from "../contexts/shopping-cart.context";
+import { Separator } from "@/components/ui/separator";
 import { DataTable, useProductListColumns } from "./product-list-table";
+
+import {
+  EditModalContext,
+  type EditModalContextData,
+} from "../contexts/edit-modal.context";
+import { useShoppingCartContext } from "../contexts/shopping-cart.context";
 
 export const ProductList = () => {
   const { shoppingCartState } = useShoppingCartContext();
-  const cartItems = shoppingCartState.shoppingCartItems;
+  const [editModalData, setEditModalData] = useState<EditModalContextData>({
+    id: null,
+    isEditModalCartItemOpen: false,
+  });
   const productListColumns = useProductListColumns();
+
+  const cartItems = shoppingCartState.shoppingCartItems;
 
   return (
     <section>
@@ -15,7 +26,14 @@ export const ProductList = () => {
       <Separator />
 
       <div className="container mx-auto py-6">
-        <DataTable columns={productListColumns} data={cartItems} />
+        <EditModalContext.Provider
+          value={{
+            editModalContextData: editModalData,
+            setEditModalContextData: setEditModalData,
+          }}
+        >
+          <DataTable columns={productListColumns} data={cartItems} />
+        </EditModalContext.Provider>
       </div>
     </section>
   );

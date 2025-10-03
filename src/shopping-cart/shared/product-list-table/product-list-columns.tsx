@@ -15,6 +15,7 @@ import {
 
 import type { ShoppingCartItem } from "@/shopping-cart/interfaces";
 import { useShoppingCartContext } from "@/shopping-cart/contexts/shopping-cart.context";
+import { EditCartItem } from "../edit-cart-item";
 
 export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
   const { shoppingCartDispatch } = useShoppingCartContext();
