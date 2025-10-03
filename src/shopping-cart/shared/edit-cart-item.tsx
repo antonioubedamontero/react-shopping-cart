@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, type FormEvent } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,11 +14,11 @@ import {
 } from "@/components/ui/form";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -28,37 +30,40 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { PROMOTIONAL_VALUES } from "../interfaces";
-
 import { useProductCartEditItem } from "./hooks";
-import { useEditModalContext } from "../contexts/edit-modal.context";
 
-export const EditCartItem = () => {
-  const { editModalContextData, setEditModalContextData } =
-    useEditModalContext();
+interface Props {
+  id: string;
+}
 
-  if (!editModalContextData.id)
-    throw new Error("Missing edit modal context data when editing cart item");
-
-  const { cartItemForm } = useProductCartEditItem(editModalContextData.id);
+export const EditCartItem = ({ id }: Props) => {
+  const { cartItemForm, editCartItemFormHandler } = useProductCartEditItem(id);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <section>
-      <Dialog open={editModalContextData.isEditModalCartItemOpen}>
-        <Form {...cartItemForm}>
-          <form
-            //onSubmit={cartItemForm.handleSubmit(editCartItemFormHandler)}
-            onSubmit={console.log}
-          >
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Editar artículo</DialogTitle>
-              </DialogHeader>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline" type="button">
+            Editar
+          </Button>
+        </DialogTrigger>
 
-              {/* TODO: Field id hidden */}
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar artículo</DialogTitle>
+          </DialogHeader>
 
-              <section>
-                {/* TODO: Selected */}
-
+          <Form {...cartItemForm}>
+            <form
+              autoComplete="off"
+              onSubmit={(event: FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                editCartItemFormHandler(cartItemForm.getValues());
+                setIsOpen(false);
+              }}
+            >
+              <section className="flex flex-col gap-4">
                 <FormField
                   control={cartItemForm.control}
                   name="name"
@@ -130,12 +135,10 @@ export const EditCartItem = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-
-                  /* TODO: total */
                 />
               </section>
 
-              <DialogFooter>
+              <DialogFooter className="flex gap-4">
                 <Button
                   className="bg-slate-400 hover:bg-slate-500"
                   type="submit"
@@ -143,24 +146,17 @@ export const EditCartItem = () => {
                   Guardar
                 </Button>
 
-                <DialogClose asChild>
-                  <Button
-                    className="bg-red-400 hover:bg-red-300"
-                    type="button"
-                    onClick={() =>
-                      setEditModalContextData({
-                        id: null,
-                        isEditModalCartItemOpen: false,
-                      })
-                    }
-                  >
-                    Cancelar
-                  </Button>
-                </DialogClose>
+                <Button
+                  className="bg-red-400 hover:bg-red-300"
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Cancelar
+                </Button>
               </DialogFooter>
-            </DialogContent>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </DialogContent>
       </Dialog>
     </section>
   );

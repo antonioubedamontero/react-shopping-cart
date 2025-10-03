@@ -23,6 +23,10 @@ export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
   return [
     // Columns
     {
+      accessorKey: "order",
+      header: "#",
+    },
+    {
       accessorKey: "numOfItems",
       header: "Cant",
     },
@@ -77,7 +81,9 @@ export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Editar</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <EditCartItem id={cartItem.id ?? "0"} />
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
                   shoppingCartDispatch({

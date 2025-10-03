@@ -62,7 +62,7 @@ const addItemToCart = (
   newItem.id = uuidv4();
 
   return {
-    shoppingCartItems: [newItem, ...state.shoppingCartItems],
+    shoppingCartItems: [...state.shoppingCartItems, newItem],
     numOfSelectedItems: state.numOfSelectedItems + 1,
     total: state.total + totalPayload,
   };

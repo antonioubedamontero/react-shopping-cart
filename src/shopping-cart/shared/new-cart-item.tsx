@@ -120,13 +120,13 @@ export const NewCartItem = () => {
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button
                 className="flex gap-2 bg-slate-400 hover:bg-slate-500"
                 type="submit"
               >
                 <IoMdAddCircleOutline />
-                <span>Añadir producto</span>
+                <span>Añadir</span>
               </Button>
 
               <Button
