@@ -1,0 +1,4 @@
+Need to fix:
+
+- when select or deselect table item, it's no updating cart total.
+- new cart item is not initializing properly select field.

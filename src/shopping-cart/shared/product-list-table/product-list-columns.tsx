@@ -16,12 +16,38 @@ import {
 import type { ShoppingCartItem } from "@/shopping-cart/interfaces";
 import { useShoppingCartContext } from "@/shopping-cart/contexts/shopping-cart.context";
 import { EditCartItem } from "../edit-cart-item";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
   const { shoppingCartDispatch } = useShoppingCartContext();
 
   return [
     // Columns
+    {
+      id: "select",
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(isSelected) => {
+            row.toggleSelected(!!isSelected);
+
+            if (isSelected)
+              return shoppingCartDispatch({
+                type: "select_item",
+                payload: { id: row.id },
+              });
+
+            return shoppingCartDispatch({
+              type: "deselect_item",
+              payload: { id: row.id },
+            });
+          }}
+          aria-label="Seleccionar fila"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "order",
       header: "#",
