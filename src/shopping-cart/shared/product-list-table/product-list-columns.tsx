@@ -14,7 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 
-import type { ShoppingCartItem } from "@/shopping-cart/interfaces";
+import {
+  PROMOTIONAL_VALUES,
+  type ShoppingCartItem,
+} from "@/shopping-cart/interfaces";
 import { useShoppingCartContext } from "@/shopping-cart/contexts/shopping-cart.context";
 import { EditCartItem } from "../edit-cart-item";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -76,6 +79,12 @@ export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
     {
       accessorKey: "promo",
       header: "Promoción",
+      cell: ({ row }) => {
+        return (
+          PROMOTIONAL_VALUES.find((item) => item.id === row.getValue("promo"))
+            ?.text ?? row.getValue("promo")
+        );
+      },
     },
     {
       accessorKey: "total",
