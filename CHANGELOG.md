@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.3] - 2025-10-04
+
+### Fixed
+
+- Fix typo in new article (mispelled as new task).
+
 ## [1.0.2] - 2025-10-04
 
 ### Fixed
