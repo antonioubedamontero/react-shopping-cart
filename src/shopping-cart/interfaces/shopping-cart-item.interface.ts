@@ -2,7 +2,7 @@ import type { Promotion } from "./";
 
 export interface ShoppingCartItem {
   id?: string;
-  selected: boolean;
+  isSelected: boolean;
   numOfItems: number;
   name: string;
   price: number;

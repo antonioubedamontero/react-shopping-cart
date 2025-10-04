@@ -9,7 +9,7 @@ import { cartItemFormSchema } from "./cart-item-zod-schema";
 
 const FORM_INITIAL_VALUE: ShoppingCartItem = {
   name: "",
-  selected: false,
+  isSelected: false,
   numOfItems: 0,
   price: 0,
   promo: "none",
@@ -31,7 +31,6 @@ export const useProductCartAddItem = () => {
   const addCartItemFormHandler = (item: z.infer<typeof cartItemFormSchema>) => {
     const newItem = {
       ...item,
-      selected: true,
       total: calSubTotal(item.numOfItems, item.price, item.promo),
     };
 

@@ -18,6 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { RxReset } from "react-icons/rx";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 import { PROMOTIONAL_VALUES } from "../interfaces";
 
@@ -38,6 +41,7 @@ export const NewCartItem = () => {
       <div className="my-5">
         <Form {...cartItemForm}>
           <form
+            autoComplete="off"
             onSubmit={cartItemForm.handleSubmit(addCartItemFormHandler)}
             className="space-y-4"
           >
@@ -80,7 +84,7 @@ export const NewCartItem = () => {
                       <Input placeholder="Precio unitario" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Precio unitario sin promoción
+                      Precio unitario <strong>sin promoción</strong>
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -98,7 +102,7 @@ export const NewCartItem = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger>
                           <SelectValue placeholder="Promoción" />
                         </SelectTrigger>
                       </FormControl>
@@ -116,21 +120,26 @@ export const NewCartItem = () => {
               />
             </div>
 
-            <div className="flex gap-2">
-              <Button className="bg-slate-400 hover:bg-slate-500" type="submit">
-                Añadir producto
+            <div className="flex flex-wrap gap-2">
+              <Button
+                className="flex gap-2 bg-slate-400 hover:bg-slate-500"
+                type="submit"
+              >
+                <IoMdAddCircleOutline />
+                <span>Añadir</span>
               </Button>
 
               <Button
-                className="bg-green-400 hover:bg-green-300"
+                className="flex gap-2 bg-green-400 hover:bg-green-300"
                 type="button"
                 onClick={() => resetCartItemFormHandler()}
               >
-                Limpiar
+                <RxReset />
+                <span>Limpiar</span>
               </Button>
 
               <Button
-                className="bg-red-400 hover:bg-red-300"
+                className="flex gap-2 bg-red-400 hover:bg-red-300"
                 type="button"
                 onClick={() =>
                   shoppingCartDispatch({
@@ -138,7 +147,8 @@ export const NewCartItem = () => {
                   })
                 }
               >
-                Vaciar carrito
+                <FaRegTrashAlt />
+                <span>Vaciar carrito</span>
               </Button>
             </div>
           </form>

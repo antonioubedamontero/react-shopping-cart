@@ -1,14 +1,15 @@
 import type { ShoppingCartItem } from "./";
 
 export type ShoppingCartActionType =
+  | "toggle_item_selection"
   | "add_item_to_cart"
+  | "edit_item_in_cart"
   | "remove_item_from_cart"
-  | "deselect_item"
-  | "select_item"
   | "clear_cart";
 
 export interface ShoppingCartPayload {
   id?: string;
+  isSelected?: boolean;
   shoppingCartItem?: ShoppingCartItem;
 }
 
@@ -19,6 +20,5 @@ export interface ShoppingCartAction {
 
 export interface ShoppingCartState {
   shoppingCartItems: ShoppingCartItem[];
-  numOfSelectedItems: number;
   total: number;
 }

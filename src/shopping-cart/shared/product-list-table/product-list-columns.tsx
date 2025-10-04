@@ -12,15 +12,46 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { CheckedState } from "@radix-ui/react-checkbox";
 
 import type { ShoppingCartItem } from "@/shopping-cart/interfaces";
 import { useShoppingCartContext } from "@/shopping-cart/contexts/shopping-cart.context";
+import { EditCartItem } from "../edit-cart-item";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
   const { shoppingCartDispatch } = useShoppingCartContext();
 
   return [
     // Columns
+    {
+      id: "select",
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: CheckedState) => {
+            row.toggleSelected(!!value);
+
+            const isSelected = !row.getIsSelected();
+
+            return shoppingCartDispatch({
+              type: "toggle_item_selection",
+              payload: {
+                id: row.original.id,
+                isSelected,
+              },
+            });
+          }}
+          aria-label="Seleccionar fila"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "order",
+      header: "#",
+    },
     {
       accessorKey: "numOfItems",
       header: "Cant",
@@ -76,7 +107,9 @@ export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Editar</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <EditCartItem id={cartItem.id ?? "0"} />
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
                   shoppingCartDispatch({
