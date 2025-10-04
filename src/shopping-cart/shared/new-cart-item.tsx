@@ -35,7 +35,7 @@ export const NewCartItem = () => {
 
   return (
     <section>
-      <h2 className="text-2xl">Nueva tarea</h2>
+      <h2 className="text-2xl">Nuevo artículo</h2>
       <Separator />
 
       <div className="my-5">
