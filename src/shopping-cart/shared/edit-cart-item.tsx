@@ -117,7 +117,7 @@ export const EditCartItem = ({ id }: Props) => {
                       <FormLabel>Promoción</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>

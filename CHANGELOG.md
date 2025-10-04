@@ -21,6 +21,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.1] - 2025-10-04
+
+### Changed
+
+- Update config files to generate dist folder as docs to upload github pages.
+
+### Fixed
+
+- Fix not initializing select fields when updating form.
+
 ## [1.0.0] - 2025-10-04
 
 ### Added
