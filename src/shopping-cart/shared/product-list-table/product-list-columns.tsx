@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { CheckedState } from "@radix-ui/react-checkbox";
 
 import type { ShoppingCartItem } from "@/shopping-cart/interfaces";
 import { useShoppingCartContext } from "@/shopping-cart/contexts/shopping-cart.context";
@@ -19,7 +20,7 @@ import { EditCartItem } from "../edit-cart-item";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
-  const { shoppingCartDispatch } = useShoppingCartContext();
+  const { shoppingCartState, shoppingCartDispatch } = useShoppingCartContext();
 
   return [
     // Columns
@@ -28,18 +29,17 @@ export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
-          onCheckedChange={(isSelected) => {
-            row.toggleSelected(!!isSelected);
+          onCheckedChange={(value: CheckedState) => {
+            row.toggleSelected(!!value);
 
-            if (isSelected)
-              return shoppingCartDispatch({
-                type: "select_item",
-                payload: { id: row.id },
-              });
+            const isSelected = !row.getIsSelected();
 
             return shoppingCartDispatch({
-              type: "deselect_item",
-              payload: { id: row.id },
+              type: "toggle_item_selection",
+              payload: {
+                id: row.original.id,
+                isSelected,
+              },
             });
           }}
           aria-label="Seleccionar fila"

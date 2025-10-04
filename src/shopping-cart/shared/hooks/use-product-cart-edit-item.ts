@@ -33,7 +33,6 @@ export const useProductCartEditItem = (id: string) => {
   ) => {
     const editedCartItem = {
       ...item,
-      selected: item.selected ?? false,
       total: calSubTotal(item.numOfItems, item.price, item.promo),
     };
 

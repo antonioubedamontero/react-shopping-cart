@@ -102,7 +102,7 @@ export const NewCartItem = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger>
                           <SelectValue placeholder="Promoción" />
                         </SelectTrigger>
                       </FormControl>

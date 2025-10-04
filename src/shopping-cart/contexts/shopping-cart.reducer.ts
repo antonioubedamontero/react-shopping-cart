@@ -4,7 +4,6 @@ import type { ShoppingCartAction, ShoppingCartState } from "../interfaces";
 
 export const shoppingCartInitialState = {
   shoppingCartItems: [],
-  numOfSelectedItems: 0,
   total: 0,
 };
 
@@ -13,6 +12,9 @@ export const shoppingCartReducer = (
   action: ShoppingCartAction
 ): ShoppingCartState => {
   switch (action.type) {
+    case "toggle_item_selection":
+      return toggleItemSelection(state, action);
+
     case "add_item_to_cart":
       return addItemToCart(state, action);
 
@@ -22,18 +24,37 @@ export const shoppingCartReducer = (
     case "remove_item_from_cart":
       return removeItemFromCart(state, action);
 
-    case "deselect_item":
-      return unSelectItemFromCart(state, action);
-
-    case "select_item":
-      return selectItemFromCart(state, action);
-
     case "clear_cart":
       return clearCart();
 
     default:
       throw new Error("Shopping cart action is not defined");
   }
+};
+
+const toggleItemSelection = (
+  state: ShoppingCartState,
+  action: ShoppingCartAction
+) => {
+  if (!action.payload) throw new Error("payload is required");
+
+  const { id: idPayload, isSelected: isSelectedPayload = false } =
+    action.payload;
+
+  const newCartItems = state.shoppingCartItems.map((item) => {
+    if (item.id === idPayload) {
+      return { ...item, isSelected: isSelectedPayload };
+    }
+    return item;
+  });
+
+  return {
+    shoppingCartItems: newCartItems,
+    total: newCartItems.reduce((acc, act) => {
+      if (act.isSelected) return acc + act.total;
+      return acc;
+    }, 0),
+  };
 };
 
 const addItemToCart = (
@@ -43,28 +64,28 @@ const addItemToCart = (
   if (!action.payload) throw new Error("payload is required");
 
   const { shoppingCartItem: shoppingCartPayloadItem } = action.payload;
+
   if (!shoppingCartPayloadItem) {
     return state;
   }
 
-  const { name: namePayload, total: totalPayload = 0 } =
-    shoppingCartPayloadItem;
+  const { name: namePayload } = shoppingCartPayloadItem;
+
   const itemExists = state.shoppingCartItems.some(
     (item) => item.name === namePayload
   );
 
   if (itemExists) {
+    // TODO: Show an alert warning item already exists
     return state;
   }
 
   // Generate new id with uuid
-  const newItem = shoppingCartPayloadItem;
-  newItem.id = uuidv4();
+  const newItem = { ...shoppingCartPayloadItem, id: uuidv4() };
 
   return {
     shoppingCartItems: [...state.shoppingCartItems, newItem],
-    numOfSelectedItems: state.numOfSelectedItems + 1,
-    total: state.total + totalPayload,
+    total: state.total,
   };
 };
 
@@ -90,19 +111,11 @@ const editItemInCart = (
     return item;
   });
 
-  const numOfSelectedItems = shoppingCartItemsEdited.reduce((acc, act) => {
-    if (act.selected) return acc + 1;
-    return acc;
-  }, 0);
-  const total = shoppingCartItemsEdited.reduce((acc, act) => {
-    if (act.selected) return acc + act.total;
-    return acc;
-  }, 0);
-
   return {
     shoppingCartItems: shoppingCartItemsEdited,
-    numOfSelectedItems,
-    total,
+    total: shoppingCartItemsEdited.reduce((acc, act) => {
+      return act.isSelected ? acc + act.total : acc;
+    }, 0),
   };
 };
 
@@ -132,80 +145,9 @@ const removeItemFromCart = (
 
   return {
     shoppingCartItems: newShoppingCartItems,
-    numOfSelectedItems: elementToRemove.selected
-      ? state.numOfSelectedItems - 1
-      : state.numOfSelectedItems,
-    total: elementToRemove.selected
-      ? state.total - elementToRemove.total!
+    total: elementToRemove.isSelected
+      ? state.total - elementToRemove.total
       : state.total,
-  };
-};
-
-const unSelectItemFromCart = (
-  state: ShoppingCartState,
-  action: ShoppingCartAction
-) => {
-  if (!action.payload) throw new Error("payload is required");
-
-  const { id: payloadId } = action.payload;
-
-  if (!payloadId) {
-    return state;
-  }
-
-  const elementToDeselect = state.shoppingCartItems.find(
-    (item) => item.id === payloadId
-  );
-
-  if (!elementToDeselect?.selected) {
-    return state;
-  }
-
-  const newShoppingCartItems = state.shoppingCartItems.map((item) => {
-    if (item.id === payloadId) {
-      item.selected = false;
-    }
-    return item;
-  });
-
-  return {
-    shoppingCartItems: newShoppingCartItems,
-    numOfSelectedItems: state.numOfSelectedItems - 1,
-    total: state.total - elementToDeselect.total!,
-  };
-};
-
-const selectItemFromCart = (
-  state: ShoppingCartState,
-  action: ShoppingCartAction
-) => {
-  if (!action.payload) throw new Error("payload is required");
-
-  const { id: payloadId } = action.payload;
-
-  if (!payloadId) {
-    return state;
-  }
-
-  const elementToSelect = state.shoppingCartItems.find(
-    (item) => item.id === payloadId
-  );
-
-  if (!elementToSelect || elementToSelect?.selected) {
-    return state;
-  }
-
-  const newShoppingCartItems = state.shoppingCartItems.map((item) => {
-    if (item.id === payloadId) {
-      item.selected = true;
-    }
-    return item;
-  });
-
-  return {
-    shoppingCartItems: newShoppingCartItems,
-    numOfSelectedItems: state.numOfSelectedItems + 1,
-    total: state.total + elementToSelect.total!,
   };
 };
 

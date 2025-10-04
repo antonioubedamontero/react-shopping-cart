@@ -120,7 +120,7 @@ export const EditCartItem = ({ id }: Props) => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="w-[180px]">
+                          <SelectTrigger>
                             <SelectValue placeholder="Promoción" />
                           </SelectTrigger>
                         </FormControl>
