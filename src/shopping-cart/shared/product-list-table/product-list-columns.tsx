@@ -20,7 +20,7 @@ import { EditCartItem } from "../edit-cart-item";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const useProductListColumns = (): ColumnDef<ShoppingCartItem>[] => {
-  const { shoppingCartState, shoppingCartDispatch } = useShoppingCartContext();
+  const { shoppingCartDispatch } = useShoppingCartContext();
 
   return [
     // Columns
